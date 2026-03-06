@@ -1,0 +1,43 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Stores user profile and total progress",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Display name of the user" },
+        "email": { "type": "string", "description": "Email address of the user" },
+        "classCode": { "type": "string", "description": "Class code the user belongs to" },
+        "totalScore": { "type": "integer", "description": "Cumulative score across all games" },
+        "totalFirstTry": { "type": "integer", "description": "Cumulative count of first-try correct answers" },
+        "timestamp": { "type": "string", "format": "date-time", "description": "Last update timestamp" }
+      },
+      "required": ["name", "email", "classCode", "totalScore"]
+    },
+    "LeaderboardEntry": {
+      "title": "Leaderboard Entry",
+      "description": "Stores a single game result",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Name of the user" },
+        "classCode": { "type": "string", "description": "Class code of the user" },
+        "subject": { "type": "string", "description": "Subject of the game" },
+        "score": { "type": "integer", "description": "Score achieved in the game" },
+        "correctAnswers": { "type": "integer", "description": "Number of correct answers" },
+        "firstTryCorrect": { "type": "integer", "description": "Number of first-try correct answers" },
+        "timestamp": { "type": "string", "format": "date-time", "description": "Timestamp of the game" }
+      },
+      "required": ["name", "classCode", "subject", "score"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/leaderboard/{entryId}": {
+      "schema": "LeaderboardEntry",
+      "description": "Global and class leaderboard entries"
+    }
+  }
+}
