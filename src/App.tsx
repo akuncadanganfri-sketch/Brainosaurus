@@ -29,7 +29,15 @@ import {
   Map,
   Crown,
   LogOut,
-  AlertCircle
+  AlertCircle,
+  Calculator,
+  Cpu,
+  Languages,
+  Globe,
+  ShieldCheck,
+  History,
+  Palette,
+  Lightbulb
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Subject, Question, GameState, LeaderboardEntry } from './types';
@@ -74,6 +82,17 @@ const SUBJECTS: Subject[] = [
   'Seni Budaya',
   'PKWU'
 ];
+
+const SUBJECT_ICONS: Record<Subject, any> = {
+  'Matematika': Calculator,
+  'Informatika': Cpu,
+  'Bahasa Indonesia': Languages,
+  'Bahasa Inggris': Globe,
+  'PKN': ShieldCheck,
+  'Sejarah': History,
+  'Seni Budaya': Palette,
+  'PKWU': Lightbulb
+};
 
 const GAME_DURATION = 10 * 60; // 10 minutes in seconds
 
@@ -1129,7 +1148,7 @@ function App() {
   return (
     <div className="min-h-screen bg-sky-50 font-sans text-slate-900 overflow-x-hidden relative">
       {/* Background for Home/Intro */}
-      {(view === 'home' || view === 'intro' || view === 'instructions' || view === 'login' || view === 'settings') && (
+      {view !== 'game' && (
         <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
           {/* Sky */}
           <div className="absolute inset-0 bg-gradient-to-b from-sky-300 to-sky-100" />
@@ -1327,22 +1346,25 @@ function App() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {SUBJECTS.map((subject) => (
-                  <button
-                    key={subject}
-                    onClick={() => handleStartGame(subject)}
-                    className="group relative bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border-2 border-white/50 hover:border-emerald-400 hover:shadow-emerald-200/50 transition-all text-left flex items-center justify-between overflow-hidden"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors shadow-inner">
-                        <BookOpen size={24} />
+                {SUBJECTS.map((subject) => {
+                  const SubjectIcon = SUBJECT_ICONS[subject] || BookOpen;
+                  return (
+                    <button
+                      key={subject}
+                      onClick={() => handleStartGame(subject)}
+                      className="group relative bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border-2 border-white/50 hover:border-emerald-400 hover:shadow-emerald-200/50 transition-all text-left flex items-center justify-between overflow-hidden"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors shadow-inner">
+                          <SubjectIcon size={24} />
+                        </div>
+                        <span className="font-bold text-lg text-slate-800">{subject}</span>
                       </div>
-                      <span className="font-bold text-lg text-slate-800">{subject}</span>
-                    </div>
-                    <ChevronRight className="text-emerald-300 group-hover:text-emerald-600 transition-colors" />
-                    <div className="absolute bottom-0 left-0 h-1.5 w-0 bg-emerald-600 group-hover:w-full transition-all duration-300" />
-                  </button>
-                ))}
+                      <ChevronRight className="text-emerald-300 group-hover:text-emerald-600 transition-colors" />
+                      <div className="absolute bottom-0 left-0 h-1.5 w-0 bg-emerald-600 group-hover:w-full transition-all duration-300" />
+                    </button>
+                  );
+                })}
               </div>
             </motion.div>
           )}
@@ -1623,10 +1645,10 @@ function App() {
           {view === 'leaderboard' && (
             <motion.div
               key="leaderboard"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="space-y-6"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white/90 backdrop-blur-md p-8 rounded-3xl shadow-2xl border-4 border-white space-y-6"
             >
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
@@ -1863,7 +1885,7 @@ function App() {
               key="achievements"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-white/90 backdrop-blur-md p-8 rounded-3xl shadow-2xl border-4 border-white space-y-8"
+              className="bg-white/90 backdrop-blur-md p-8 rounded-3xl shadow-2xl border-4 border-white space-y-6"
             >
               <div className="flex items-center gap-4">
                 <button onClick={() => setView('home')} className="p-2 hover:bg-slate-100 rounded-full text-slate-600">
